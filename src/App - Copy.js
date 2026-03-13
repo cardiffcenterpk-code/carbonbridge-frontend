@@ -7,38 +7,9 @@ import Admin from './Admin';
 // src/App.js (Updated with Wallet Logic)
 import { ethers } from "ethers";
 
-// You will need to run: npm install chart.js react-chartjs-2
-import { Line } from 'react-chartjs-2';
-// IMPORTANT: Import and register Chart.js components
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
-
 // Replace these with your actual data from Remix
 const contractAddress = "0xd9145CCE52D386f254917e481eB44e9943F39138";
-
-// You need to define your contractABI here
-const contractABI = [[
+const contractABI = [ [
 	{
 		"inputs": [
 			{
@@ -482,7 +453,7 @@ const contractABI = [[
 		"stateMutability": "view",
 		"type": "function"
 	}
-]]; // Add your actual ABI here
+] ];
 
 async function connectWallet() {
   if (window.ethereum) {
@@ -505,70 +476,31 @@ async function connectWallet() {
   }
 }
 
-const BottomImpactGraph = () => {
-  const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    datasets: [{
-      label: 'Cumulative CO2 Retired (Metric Tons)',
-      data: [65, 59, 80, 81, 56, 55, 40], 
-      borderColor: '#00b894',
-      backgroundColor: 'rgba(0, 184, 148, 0.1)',
-      fill: true,
-      tension: 0.4
-    }]
-  };
-
-  const options = {
-    maintainAspectRatio: false,
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-      },
-      tooltip: {
-        enabled: true,
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Metric Tons CO2'
-        }
-      }
-    }
-  };
-
-  return (
-    <div style={{ padding: '40px', background: '#fff', borderTop: '2px solid #eee', marginTop: '50px' }}>
-      <h3 style={{ textAlign: 'center', color: '#2d3436' }}>Real-Time Proof of Impact Ledger</h3>
-      <div style={{ height: '300px', maxWidth: '900px', margin: '0 auto' }}>
-        <Line data={data} options={options} />
-      </div>
-      <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#636e72', marginTop: '10px' }}>
-        "Your portfolio grows, while the carbon footprint sinks" [4, 7].
-      </p>
-    </div>
-  );
-};
-
 function App() {
   const [view, setView] = useState('home');
 
   // Inside your App function
-  const [walletAddress, setWalletAddress] = useState("");
+const [walletAddress, setWalletAddress] = useState("");
 
-  const handleConnect = async () => {
-    const connection = await connectWallet();
-    if (connection) {
-      setWalletAddress(connection.address);
-    }
-  };
+const handleConnect = async () => {
+  const connection = await connectWallet();
+  if (connection) {
+    setWalletAddress(connection.address);
+  }
+};
+
+
+
+
 
   return (
     <div className="App">
+
+    
+      
+
+
+
       <nav className="navbar">
         <div className="logo-area">
           <span style={{cursor: 'pointer'}} onClick={() => setView('home')}>🌿 CarbonBRIDGE</span>
@@ -578,15 +510,6 @@ function App() {
           <button onClick={() => setView('retire')}>Retire Tokens</button> {/* UPDATED */}
           
           <button onClick={() => setView('admin')}>Admin</button>
-
-          {/* NEW: Dashboard Button */}
-          <button 
-            onClick={() => setView('dashboard')}
-            style={{ fontWeight: 'bold', color: '#0984e3', border: '1px solid #0984e3', borderRadius: '5px' }}
-          >
-            📊 Impact Dashboard
-          </button>
-
           <button onClick={handleConnect} style={{background: '#2d5a27', color: 'white'}}>
           {walletAddress ? `Connected: ${walletAddress.substring(0,6)}...` : "Connect Wallet"}
           </button>
@@ -621,12 +544,14 @@ function App() {
         </>
       )}
 
+
+
+
+
+      
       {view === 'marketplace' && <Marketplace />}
       {view === 'retire' && <Retire />} {/* NEW VIEW */}
       {view === 'admin' && <Admin />}
-
-      {/* --- CHART AT THE BOTTOM --- */}
-      <BottomImpactGraph />
 
       <footer className="footer">
         <p>© 2026 Carbon Bridge Crypto Inc. | USA & UAE Compliance</p>
