@@ -453,12 +453,16 @@ const contractABI = [[
 		"type": "function"
 	}
 ]
-  // ... Paste your full ABI array here from your source [3, 4]
+
 ];
+
+
+
 
 function App() {
   const [view, setView] = useState('home'); // Default view is Home
   const [walletAddress, setWalletAddress] = useState("");
+  
 
   // Wallet Connection Logic [5, 6]
   const connectWallet = async () => {
@@ -474,6 +478,7 @@ function App() {
       alert("Please install MetaMask to use CarbonBRIDGE!");
     }
   };
+  
 
   return (
     <div className="App">
