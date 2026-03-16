@@ -22,42 +22,13 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcEleme
 
 
 
-// --- COMPONENT: CENTERED GLOBAL INSIGHT CARD ---
-// Redesigned for bigger, centered images and text underneath
+// --- COMPONENT: GLOBAL INSIGHT CARD ---
 const GlobalInsightCard = ({ title, img, description }) => (
-  <div style={{ 
-    background: '#fff', 
-    padding: '40px', 
-    borderRadius: '15px', 
-    boxShadow: '0 4px 20px rgba(0,0,0,0.05)', 
-    marginBottom: '50px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center', // Centers the content
-    textAlign: 'center'   // Centers the text
-  }}>
-    <h3 style={{ color: 'var(--cb-green)', marginBottom: '30px', fontSize: '24px' }}>{title}</h3>
-    
-    <img 
-      src={img} 
-      alt={title} 
-      style={{ 
-        //maxWidth: '1200px', // Makes the picture much bigger
-        width: '100%', 
-        borderRadius: '12px', 
-        border: '1px solid #eee',
-        marginBottom: '30px',
-        boxShadow: '0 2px 15px rgba(0,0,0,0.1)'
-      }} 
-    />
-    
-    <div style={{ 
-      //maxWidth: '850px', // Keeps text readable under large images
-      fontSize: '1.1rem', 
-      color: '#2c3e50', 
-      lineHeight: '1.8' 
-    }}>
-      {description}
+  <div style={{ background: '#fff', padding: '25px', borderRadius: '15px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', marginBottom: '30px' }}>
+    <h3 style={{ color: '#2d5a27', borderBottom: '2px solid #f0f4f2', paddingBottom: '10px' }}>{title}</h3>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', alignItems: 'center', marginTop: '20px' }}>
+      <img src={img} alt={title} style={{ width: '100%', borderRadius: '10px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }} />
+      <p style={{ fontSize: '0.95rem', color: '#2c3e50', lineHeight: '1.6' }}>{description}</p>
     </div>
   </div>
 );
@@ -133,7 +104,7 @@ const ImpactDashboard = () => {
     <div style={{ padding: '40px', background: 'linear-gradient(135deg, #f0f4f2 0%, #e6f7ff 100%)', minHeight: '100vh' }}>
       <header style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ color: '#2d5a27' }}>Public Impact Dashboard</h1>
-        <p style={{ color: '#2c3e50' }}>"Your portfolio grows, while the carbon footprint sinks" </p>
+        <p style={{ color: '#2c3e50' }}>"Your portfolio grows, while the carbon footprint sinks" [7]</p>
       </header>
 
       {/* Hero Stats */}
