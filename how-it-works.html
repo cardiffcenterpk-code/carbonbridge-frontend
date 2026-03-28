@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works — CarbonBridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ---- HOW IT WORKS SPECIFIC ---- */
+    .hiw-timeline { padding: 80px 0; }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--green-dim), transparent);
+      transform: translateX(-50%);
+    }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0 2rem;
+      margin-bottom: 5rem;
+      align-items: start;
+    }
+    .tl-item:nth-child(even) .tl-content-left { order: 3; }
+    .tl-item:nth-child(even) .tl-dot         { order: 2; }
+    .tl-item:nth-child(even) .tl-content-right { order: 1; }
+    .tl-dot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px; height: 60px;
+      background: var(--bg-card);
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--green);
+      position: relative;
+      z-index: 1;
+      font-weight: 500;
+    }
+    .tl-dot::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(74,222,128,0.2);
+    }
+    .tl-content-left, .tl-content-right {
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.3s;
+    }
+    .tl-content-left:hover, .tl-content-right:hover { border-color: var(--border-md); }
+    .tl-content-left { text-align: right; }
+    .tl-content-right { text-align: left; }
+    .tl-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .tl-title {
+      font-family: var(--font-sans);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .tl-body { font-size: 0.9rem; line-height: 1.7; }
+    .tl-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+
+    /* ---- TOKEN ANATOMY ---- */
+    .token-card {
+      max-width: 700px;
+      margin: 4rem auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-md);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .token-header {
+      background: rgba(74,222,128,0.06);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .token-header h3 {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .token-id {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--green);
+      background: rgba(74,222,128,0.1);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
+    .token-fields { padding: 1.5rem 2rem; display: flex; flex-direction: column; gap: 0; }
+    .token-field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .token-field:last-child { border-bottom: none; }
+    .tf-key {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .tf-val {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--green-pale);
+      text-align: right;
+    }
+    .tf-val.green { color: var(--green); }
+    .tf-val.gold { color: var(--gold); }
+    .tf-val.muted { color: var(--muted); }
+
+    /* ---- CERT STANDARDS ---- */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .cert-card {
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .cert-card:hover { border-color: var(--border-md); transform: translateY(-4px); }
+    .cert-badge {
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .cert-badge.gs { background: rgba(212,168,67,0.15); color: var(--gold); border: 1px solid rgba(212,168,67,0.3); }
+    .cert-badge.verra { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid var(--border-md); }
+    .cert-badge.icvcm { background: rgba(255,255,255,0.05); color: var(--white); border: 1px solid var(--border); }
+    .cert-card h3 {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .cert-card p { font-size: 0.88rem; line-height: 1.6; }
+
+    /* ---- FAQ ---- */
+    .faq-section { padding: 80px 0; }
+    .faq-list { max-width: 720px; margin: 3rem auto 0; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 1.25rem 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: color 0.2s;
+    }
+    .faq-q:hover { color: var(--green); }
+    .faq-icon {
+      width: 24px; height: 24px;
+      border: 1px solid var(--border-md);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      color: var(--green);
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-a-inner {
+      padding-bottom: 1.25rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .faq-item.open .faq-a { max-height: 300px; }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 30px; }
+      .tl-item { grid-template-columns: 60px 1fr; grid-template-rows: auto auto; }
+      .tl-item .tl-content-left { order: 2; grid-column: 2; text-align: left; }
+      .tl-item .tl-dot          { order: 1; grid-column: 1; }
+      .tl-item .tl-content-right { order: 3; grid-column: 2; }
+      .tl-item:nth-child(even) .tl-content-left  { order: 2; }
+      .tl-item:nth-child(even) .tl-dot           { order: 1; }
+      .tl-item:nth-child(even) .tl-content-right { order: 3; }
+      .cert-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-mark">◈</span>
+      <span>CarbonBridge</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="how-it-works.html" class="nav-link active">How It Works</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="login.html" class="nav-cta">Connect / Login</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Connect / Login</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-bg">
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+  <div class="page-hero-content">
+    <p class="section-tag">The Full Process</p>
+    <h1>From certification to<br><em>on-chain proof.</em></h1>
+    <p style="margin-top:1rem">Every CarbonBridge token (CBT) is traceable from its origin project to its final retirement. Here's how the entire lifecycle works.</p>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="hiw-timeline">
+  <div class="container">
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-content-left">
+          <span class="tl-tag">Step 01 — Origin</span>
+          <span class="tl-icon">🌿</span>
+          <div class="tl-title">Verified Carbon Projects</div>
+          <p class="tl-body">Carbon reduction or removal projects (forests, renewable energy, cookstoves, soil sequestration) are developed and independently audited by third-party verifiers. Projects must demonstrate additionality — the reductions would not have happened without the project.</p>
+        </div>
+        <div class="tl-dot">01</div>
+        <div class="tl-content-right">
+          <p class="tl-body" style="color:var(--green-pale)"><strong>What counts as a project?</strong></p>
+          <ul style="list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:0.5rem">
+            <li style="font-size:0.85rem;color:var(--muted)">🌲 Avoided deforestation (REDD+)</li>
+            <li style="font-size:0.85rem;color:var(--muted)">☀️ Renewable energy deployment</li>
+            <li style="font-size:0.85rem;color:var(--muted)">🔥 Clean cookstove distribution</li>
+            <li style="font-size:0.85rem;color:var(--muted)">🌊 Blue carbon (mangroves, seagrass)</li>
+            <li style="font-size:0.85rem;color:var(--muted)">🌱 Soil carbon sequestration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-content-left">
+          <p class="tl-body" style="color:var(--green-pale)"><strong>Registry Certification</strong></p>
+          <p class="tl-body" style="margin-top:0.5rem">Projects are submitted to Gold Standard or Verra's Verified Carbon Standard. Rigorous methodology, monitoring and verification protocols must be met before any credit is issued.</p>
+          <div style="margin-top:1rem;display:flex;gap:0.75rem;justify-content:flex-end">
+            <span style="font-family:var(--font-mono);font-size:0.72rem;padding:0.3rem 0.75rem;background:rgba(212,168,67,0.1);color:var(--gold);border-radius:100px;border:1px solid rgba(212,168,67,0.3)">Gold Standard</span>
+            <span style="font-family:var(--font-mono);font-size:0.72rem;padding:0.3rem 0.75rem;background:rgba(74,222,128,0.08);color:var(--green);border-radius:100px;border:1px solid var(--border-md)">Verra VCS</span>
+          </div>
+        </div>
+        <div class="tl-dot">02</div>
+        <div class="tl-content-right">
+          <span class="tl-tag">Step 02 — Certification</span>
+          <span class="tl-icon">📋</span>
+          <div class="tl-title">Registry Approval &amp; Credit Issuance</div>
+          <p class="tl-body">Once a project passes verification, the registry issues carbon credits — each representing exactly one tonne of CO₂ equivalent reduced or removed. These credits are recorded in the registry's ledger.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-content-left">
+          <span class="tl-tag">Step 03 — Tokenisation</span>
+          <span class="tl-icon">⛓</span>
+          <div class="tl-title">Minting CBT Tokens on Blockchain</div>
+          <p class="tl-body">CarbonBridge acquires verified credits from the registry and immediately mints a corresponding CBT (CarbonBridge Token) on-chain. The originating registry credit is simultaneously marked as retired in the registry, preventing any double use.</p>
+        </div>
+        <div class="tl-dot">03</div>
+        <div class="tl-content-right">
+          <p class="tl-body" style="color:var(--green-pale)"><strong>On-chain data stored per token:</strong></p>
+          <ul style="list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:0.4rem">
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">TOKEN_ID &nbsp; · &nbsp; unique on-chain identifier</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">REGISTRY &nbsp; · &nbsp; Gold Standard / Verra</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">PROJECT_ID · registry project reference</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">VINTAGE &nbsp; · &nbsp; year of CO₂ reduction</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">METHODOLOGY · verification standard used</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">STATUS &nbsp; · &nbsp; ISSUED / HELD / RETIRED</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-content-left">
+          <p class="tl-body" style="color:var(--green-pale)"><strong>Purchase options:</strong></p>
+          <ul style="list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:0.5rem">
+            <li style="font-size:0.85rem;color:var(--muted)">🔗 Connect Web3 wallet (MetaMask, WalletConnect)</li>
+            <li style="font-size:0.85rem;color:var(--muted)">🏢 Organisational login portal</li>
+            <li style="font-size:0.85rem;color:var(--muted)">💳 Bank transfer for institutional buyers</li>
+            <li style="font-size:0.85rem;color:var(--muted)">📊 API integration for automated purchasing</li>
+          </ul>
+        </div>
+        <div class="tl-dot">04</div>
+        <div class="tl-content-right">
+          <span class="tl-tag">Step 04 — Purchase</span>
+          <span class="tl-icon">🏢</span>
+          <div class="tl-title">Organisations Buy Tokens</div>
+          <p class="tl-body">Organisations calculate their carbon footprint and purchase the matching number of CBT tokens. Each token = 1 tonne CO₂e offset. Tokens are transferred to the organisation's wallet or portfolio account.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-content-left">
+          <span class="tl-tag">Step 05 — Retirement</span>
+          <span class="tl-icon">🔥</span>
+          <div class="tl-title">Token Retirement (Burning)</div>
+          <p class="tl-body">When an organisation is ready to claim their offset, they initiate a retirement transaction. The tokens are sent to a provably unspendable burn address — permanently destroyed on-chain, with the transaction hash serving as an immutable retirement certificate.</p>
+        </div>
+        <div class="tl-dot">05</div>
+        <div class="tl-content-right">
+          <p class="tl-body" style="color:var(--green-pale)"><strong>Your retirement certificate includes:</strong></p>
+          <ul style="list-style:none;margin-top:1rem;display:flex;flex-direction:column;gap:0.4rem">
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">TX_HASH · blockchain transaction hash</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">BLOCK · block number &amp; timestamp</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">TOKENS_RETIRED · quantity &amp; tCO₂e</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">RETIREE · organisation wallet address</li>
+            <li style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">BENEFIT_TO · offset beneficiary</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TOKEN ANATOMY -->
+<section class="section" style="background:var(--bg-raised);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Token Structure</p>
+      <h2 class="section-title">What's inside a CBT token.</h2>
+      <p class="section-body" style="margin:0 auto">Every CarbonBridge Token carries complete provenance data — readable by anyone, anywhere, forever.</p>
+    </div>
+    <div class="token-card">
+      <div class="token-header">
+        <h3>CarbonBridge Token (CBT)</h3>
+        <span class="token-id">CBT-#0002847</span>
+      </div>
+      <div class="token-fields">
+        <div class="token-field">
+          <span class="tf-key">TOKEN_TYPE</span>
+          <span class="tf-val green">ERC-1155 · Non-Fungible Carbon Credit</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">REGISTRY</span>
+          <span class="tf-val gold">Gold Standard Foundation</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">PROJECT_ID</span>
+          <span class="tf-val">GS-7281 · Cookstove Distribution, Kenya</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">VINTAGE_YEAR</span>
+          <span class="tf-val">2023</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">CO2_EQUIVALENT</span>
+          <span class="tf-val green">1.000 tCO₂e</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">METHODOLOGY</span>
+          <span class="tf-val">GS-TPDDTEC v3.0 (Clean Cooking)</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">MINT_BLOCK</span>
+          <span class="tf-val muted">0x3a4f...c8d1 · Block #19,284,711</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">STATUS</span>
+          <span class="tf-val green">● ACTIVE — Available for retirement</span>
+        </div>
+        <div class="token-field">
+          <span class="tf-key">CURRENT_HOLDER</span>
+          <span class="tf-val muted">0x8b4a...3f92 (Acme Corp)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARDS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Recognised Standards</p>
+      <h2 class="section-title">Certified by the best.</h2>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-badge gs">GS</div>
+        <h3>Gold Standard</h3>
+        <p>The premium benchmark for climate and development. Founded by WWF. Requires projects to demonstrate measurable sustainable development co-benefits beyond carbon.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-badge verra">VCS</div>
+        <h3>Verra Verified Carbon Standard</h3>
+        <p>The world's most used voluntary carbon standard. Over 2,300 registered projects globally. Rigorous additionality, permanence and verification requirements.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-badge icvcm">CCP</div>
+        <h3>ICVCM Core Carbon Principles</h3>
+        <p>The Integrity Council for the Voluntary Carbon Market's global quality benchmark. CCP-eligible credits represent the highest integrity tier in the voluntary market.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" style="background:var(--bg-raised);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Questions</p>
+      <h2 class="section-title">Common questions answered.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">
+          What stops the same token being used twice?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">When a CBT token is retired, it is sent to a provably unspendable burn address on the blockchain — a public address for which no private key exists or can ever exist. This is a cryptographic guarantee: it is mathematically impossible to move tokens out of this address. The blockchain's immutability means this record can never be altered. Additionally, the underlying registry credit (Gold Standard or Verra) is simultaneously cancelled, preventing any corresponding credit from entering the system again.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          How do I calculate my organisation's carbon footprint?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">CarbonBridge provides a footprint calculator in your dashboard, covering Scope 1 (direct emissions), Scope 2 (purchased energy) and Scope 3 (value chain). You can also import data from existing GHG inventories or work with your sustainability team. For large organisations, we offer a guided assessment service. The result tells you exactly how many CBT tokens to purchase to achieve carbon neutrality.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          Can I choose which type of carbon project my tokens come from?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Yes. The CarbonBridge marketplace lets you filter tokens by project type (forestry, renewable energy, cookstoves, blue carbon, etc.), country, vintage year, and registry. This allows you to align your offset portfolio with your company's values and stakeholder preferences — for example, choosing projects in specific geographies or those with particularly strong SDG co-benefits.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          What reporting and documentation do I get after retiring tokens?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Upon retirement you receive: (1) a blockchain transaction hash that anyone can verify on the public explorer, (2) a signed digital retirement certificate in PDF format, (3) a dashboard record showing all tokens retired by date, project and tonne, and (4) an annual retirement summary suitable for inclusion in your sustainability or ESG report. These are legally defensible records of your carbon offset claim.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          Do I need a crypto wallet to use CarbonBridge?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">No. CarbonBridge offers both a traditional organisational login (email/password) and a Web3 wallet connection (MetaMask, WalletConnect, etc.). Non-crypto organisations can manage everything through our portal — CarbonBridge handles the blockchain interactions behind the scenes. Crypto-native organisations can connect their own wallet for full on-chain control.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg">
+    <div class="orb-cta1"></div>
+    <div class="orb-cta2"></div>
+  </div>
+  <div class="container cta-content">
+    <h2 class="cta-title">Start your offset journey.</h2>
+    <p class="cta-sub">Join hundreds of organisations using CarbonBridge for transparent, verifiable carbon offsetting.</p>
+    <div class="cta-actions">
+      <a href="login.html" class="btn-primary btn-lg">Create Account / Connect Wallet</a>
+      <a href="dashboard.html" class="btn-ghost">View Live Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <span class="logo-mark">◈</span>
+          <span>CarbonBridge</span>
+        </div>
+        <p>Blockchain-verified carbon offset tokens, backed by Gold Standard and Verra certified credits.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Platform</h4>
+        <a href="index.html">Home</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="login.html">Login / Connect</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="#">Whitepaper</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Standards</h4>
+        <a href="https://www.goldstandard.org" target="_blank">Gold Standard ↗</a>
+        <a href="https://verra.org" target="_blank">Verra ↗</a>
+        <a href="https://unfccc.int" target="_blank">UNFCCC ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 CarbonBridge. All rights reserved.</span>
+      <span>Privacy · Terms · Whitepaper</span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

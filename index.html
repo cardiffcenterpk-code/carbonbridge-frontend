@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarbonBridge — Blockchain Carbon Offset Tokens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-mark">◈</span>
+      <span>CarbonBridge</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="login.html" class="nav-cta">Connect / Login</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Connect / Login</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge reveal">
+      <span class="badge-dot"></span>
+      Gold Standard & Verra Certified
+    </div>
+    <h1 class="hero-title reveal">
+      Carbon Offsetting<br>
+      <em>Secured by</em><br>
+      Blockchain
+    </h1>
+    <p class="hero-sub reveal">
+      CarbonBridge issues tamper-proof on-chain tokens, each backed by a verified carbon credit. 
+      Organisations buy, retire and report with complete transparency — no double counting, ever.
+    </p>
+    <div class="hero-actions reveal">
+      <a href="login.html" class="btn-primary">Start Offsetting</a>
+      <a href="how-it-works.html" class="btn-ghost">How It Works →</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hstat">
+        <span class="hstat-num" data-target="2847392">0</span>
+        <span class="hstat-label">Tokens Issued</span>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <span class="hstat-num" data-target="1203847">0</span>
+        <span class="hstat-label">Tonnes CO₂ Retired</span>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <span class="hstat-num" data-target="347">0</span>
+        <span class="hstat-label">Partner Organisations</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<section class="trust-bar">
+  <div class="trust-inner">
+    <span class="trust-label">Recognised Standards</span>
+    <div class="trust-logos">
+      <div class="trust-logo">Gold Standard</div>
+      <div class="trust-sep">◆</div>
+      <div class="trust-logo">Verra VCS</div>
+      <div class="trust-sep">◆</div>
+      <div class="trust-logo">UNFCCC</div>
+      <div class="trust-sep">◆</div>
+      <div class="trust-logo">Paris Agreement</div>
+      <div class="trust-sep">◆</div>
+      <div class="trust-logo">ICVCM</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS IT -->
+<section class="what-section section">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-left">
+        <p class="section-tag">The Problem</p>
+        <h2 class="section-title">Carbon markets<br>need trust.</h2>
+        <p class="section-body">
+          Traditional carbon credits suffer from opacity, double-counting, and fraud. 
+          Organisations spend millions on offsets they can't verify.
+        </p>
+        <p class="section-body">
+          CarbonBridge solves this by tokenising certified carbon credits on a public 
+          blockchain — every token's lifecycle is immutably recorded from issuance to retirement.
+        </p>
+        <a href="how-it-works.html" class="link-arrow">Explore the solution →</a>
+      </div>
+      <div class="what-right">
+        <div class="problem-cards">
+          <div class="problem-card bad">
+            <div class="pc-icon">✗</div>
+            <div class="pc-label">Traditional Markets</div>
+            <ul class="pc-list">
+              <li>Opaque registries</li>
+              <li>Double-counting risk</li>
+              <li>Slow verification (weeks)</li>
+              <li>Illiquid & fragmented</li>
+            </ul>
+          </div>
+          <div class="problem-card good">
+            <div class="pc-icon">◈</div>
+            <div class="pc-label">CarbonBridge</div>
+            <ul class="pc-list">
+              <li>Public blockchain ledger</li>
+              <li>One token, one tonne — always</li>
+              <li>Instant on-chain verification</li>
+              <li>Liquid & tradeable</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS TEASER -->
+<section class="steps-section section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">The Process</p>
+      <h2 class="section-title">From forest to ledger<br>in four steps.</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">🌿</div>
+        <h3>Verified Projects</h3>
+        <p>Carbon reduction projects are audited and certified by Gold Standard or Verra, generating verified credits.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">⛓</div>
+        <h3>Token Minting</h3>
+        <p>Each verified tonne of CO₂ reduction is minted as a unique, non-fungible CBT token on-chain with full provenance.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🏢</div>
+        <h3>Organisation Purchase</h3>
+        <p>Organisations connect their wallet or use our portal to purchase the exact number of tokens matching their footprint.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🔥</div>
+        <h3>Retirement & Proof</h3>
+        <p>Tokens are publicly burned on-chain — creating an immutable, auditable retirement certificate for reporting.</p>
+      </div>
+    </div>
+    <div class="center" style="margin-top:3rem">
+      <a href="how-it-works.html" class="btn-primary">Full Process Details</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET DATA SECTION -->
+<section class="market-section section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Market Context</p>
+      <h2 class="section-title">The carbon offset<br>market is growing.</h2>
+    </div>
+    <div class="market-grid">
+      <div class="market-stat-card">
+        <div class="ms-value">$15.8B</div>
+        <div class="ms-label">Voluntary Carbon Market size (2025)</div>
+        <div class="ms-trend up">↑ Growing at 25% CAGR to 2034</div>
+      </div>
+      <div class="market-stat-card">
+        <div class="ms-value">163M</div>
+        <div class="ms-label">Tonnes CO₂ retired in 2024 globally</div>
+        <div class="ms-trend up">↑ Record retirements 3 consecutive years</div>
+      </div>
+      <div class="market-stat-card">
+        <div class="ms-value">6,200+</div>
+        <div class="ms-label">Companies with science-based targets</div>
+        <div class="ms-trend up">↑ 1,200 new companies joined in 2023</div>
+      </div>
+      <div class="market-stat-card">
+        <div class="ms-value">$120B</div>
+        <div class="ms-label">Projected market value by 2030</div>
+        <div class="ms-trend up">↑ 50% CAGR forecast (Mordor Intelligence)</div>
+      </div>
+    </div>
+
+    <!-- Mini chart area -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Global Carbon Credit Retirements (MtCO₂e)</h3>
+        <div class="chart-legend">
+          <span class="leg-dot nature"></span> Nature-Based
+          <span class="leg-dot renew"></span> Renewable Energy
+          <span class="leg-dot other"></span> Other
+        </div>
+      </div>
+      <div class="bar-chart" id="retirementChart">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="chart-source">Sources: Sylvera, Climate Focus, Abatable (2024 Annual Reviews)</div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRY SECTION -->
+<section class="registry-section section">
+  <div class="container">
+    <div class="registry-grid">
+      <div class="registry-left">
+        <p class="section-tag">Standards We Support</p>
+        <h2 class="section-title">Every token backed<br>by the world's leading<br>carbon registries.</h2>
+        <p class="section-body">
+          CarbonBridge tokens are minted exclusively against credits from 
+          Gold Standard and Verra's Verified Carbon Standard — two of the most 
+          rigorous and recognised certification frameworks globally.
+        </p>
+        <p class="section-body">
+          This means every CBT you purchase represents a real, additional, 
+          measurable tonne of CO₂ equivalent reduced or removed.
+        </p>
+        <a href="dashboard.html" class="btn-primary" style="margin-top:1.5rem;display:inline-block">View Live Registry Stats</a>
+      </div>
+      <div class="registry-right">
+        <div class="registry-cards">
+          <div class="reg-card">
+            <div class="reg-logo gs">GS</div>
+            <div class="reg-info">
+              <h4>Gold Standard</h4>
+              <p>Founded by WWF. The premium standard for climate and development projects. Certifies projects must deliver SDG co-benefits beyond carbon reduction.</p>
+              <div class="reg-stat">776M+ credits issued</div>
+            </div>
+          </div>
+          <div class="reg-card">
+            <div class="reg-logo verra">VCS</div>
+            <div class="reg-info">
+              <h4>Verra (VCS)</h4>
+              <p>The world's leading voluntary carbon standard. Over 2,300 registered projects spanning forestry, energy, transport and waste globally.</p>
+              <div class="reg-stat">63% of global retirements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCKCHAIN FEATURE -->
+<section class="blockchain-section section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Blockchain Integrity</p>
+      <h2 class="section-title">Why blockchain changes everything.</h2>
+    </div>
+    <div class="bc-features">
+      <div class="bc-feat">
+        <div class="bc-icon">🔒</div>
+        <h3>Immutable Records</h3>
+        <p>Every token issuance, transfer and retirement is permanently recorded on a public blockchain — no entity can alter or delete it.</p>
+      </div>
+      <div class="bc-feat">
+        <div class="bc-icon">♾️</div>
+        <h3>No Double Counting</h3>
+        <p>Each CBT token represents exactly one tonne. Once retired (burned), it cannot be reused, transferred, or claimed again — mathematically impossible.</p>
+      </div>
+      <div class="bc-feat">
+        <div class="bc-icon">🔍</div>
+        <h3>Instant Auditability</h3>
+        <p>Any regulator, auditor or stakeholder can verify your retirement proofs in seconds using our public explorer — no need to trust our word.</p>
+      </div>
+      <div class="bc-feat">
+        <div class="bc-icon">⚡</div>
+        <h3>Real-Time Settlement</h3>
+        <p>Purchases and retirements settle in minutes, not weeks. Eliminate the back-office friction of traditional carbon registries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-bg">
+    <div class="orb orb-cta1"></div>
+    <div class="orb orb-cta2"></div>
+  </div>
+  <div class="container cta-content">
+    <h2 class="cta-title">Ready to offset<br>your carbon footprint?</h2>
+    <p class="cta-sub">Join 347 organisations already using CarbonBridge to meet their climate commitments with verifiable, on-chain proof.</p>
+    <div class="cta-actions">
+      <a href="login.html" class="btn-primary btn-lg">Connect Wallet / Login</a>
+      <a href="dashboard.html" class="btn-ghost">Explore Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <span class="logo-mark">◈</span>
+          <span>CarbonBridge</span>
+        </div>
+        <p>Blockchain-verified carbon offset tokens, backed by Gold Standard and Verra certified credits.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Platform</h4>
+        <a href="index.html">Home</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="login.html">Login / Connect</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="#">Whitepaper</a>
+        <a href="#">Contact</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-links">
+        <h4>Standards</h4>
+        <a href="https://www.goldstandard.org" target="_blank">Gold Standard ↗</a>
+        <a href="https://verra.org" target="_blank">Verra ↗</a>
+        <a href="https://unfccc.int" target="_blank">UNFCCC ↗</a>
+        <a href="https://icvcm.org" target="_blank">ICVCM ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 CarbonBridge. All rights reserved.</span>
+      <span>Privacy · Terms · Whitepaper</span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

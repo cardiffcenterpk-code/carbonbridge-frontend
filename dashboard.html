@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Dashboard — CarbonBridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ---- DASHBOARD STYLES ---- */
+    body { background: var(--bg); }
+
+    .dash-header {
+      padding: calc(var(--nav-h) + 3rem) 2rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-raised);
+    }
+    .dash-header-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .dash-title { font-size: clamp(2rem, 4vw, 3rem); }
+    .dash-live {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--green);
+      letter-spacing: 0.08em;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    .dash-body {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* KPI grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.3s;
+    }
+    .kpi-card:hover { border-color: var(--border-md); }
+    .kpi-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 0.25rem;
+    }
+    .kpi-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .kpi-change {
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+    }
+    .kpi-change.up { color: var(--green); }
+    .kpi-change.dn { color: var(--danger); }
+
+    /* Charts row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .chart-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .panel-title {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+    .panel-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    canvas { max-width: 100%; }
+
+    /* Donut legend */
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+    .dl-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .dl-dot {
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .dl-label { font-size: 0.82rem; color: var(--muted); }
+    .dl-val { font-family: var(--font-mono); font-size: 0.78rem; color: var(--green); margin-left: auto; }
+
+    /* Market context row */
+    .context-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Global market bar chart */
+    .global-bars { display: flex; align-items: flex-end; gap: 8px; height: 180px; margin-top: 1rem; }
+    .gb-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .gb-bars { display: flex; gap: 2px; align-items: flex-end; width: 100%; }
+    .gb-bar {
+      flex: 1;
+      border-radius: 3px 3px 0 0;
+      transition: opacity 0.2s;
+      min-height: 2px;
+    }
+    .gb-bar:hover { opacity: 0.75; cursor: pointer; }
+    .gb-year {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+
+    /* Project breakdown horizontal bars */
+    .h-bar-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+    .hb-item { display: flex; flex-direction: column; gap: 4px; }
+    .hb-header { display: flex; justify-content: space-between; align-items: center; }
+    .hb-label { font-size: 0.82rem; color: var(--muted); }
+    .hb-val { font-family: var(--font-mono); font-size: 0.78rem; color: var(--green); }
+    .hb-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .hb-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Recent retirements table */
+    .retirements-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .rp-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rp-table { width: 100%; border-collapse: collapse; }
+    .rp-table th {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.85rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .rp-table td {
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .rp-table tr:last-child td { border-bottom: none; }
+    .rp-table tr:hover td { background: rgba(74,222,128,0.03); }
+    .td-hash {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--green);
+    }
+    .td-org { color: var(--white); font-weight: 600; }
+    .td-tonnes { font-family: var(--font-mono); font-size: 0.82rem; color: var(--green); }
+    .td-type { font-size: 0.78rem; color: var(--muted); }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+    }
+    .badge-status.retired { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+    .badge-status.pending { background: rgba(212,168,67,0.1); color: var(--gold); border: 1px solid rgba(212,168,67,0.2); }
+
+    /* Market context cards */
+    .market-context {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .mc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .mc-card h4 {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .mc-card p { font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.75rem; }
+    .mc-num {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      color: var(--green);
+      font-weight: 500;
+    }
+    .mc-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+      .context-row { grid-template-columns: 1fr; }
+      .market-context { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .market-context { grid-template-columns: 1fr; }
+      .rp-table th:nth-child(4), .rp-table td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-mark">◈</span>
+      <span>CarbonBridge</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="login.html" class="nav-cta">Connect / Login</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Connect / Login</a>
+  </div>
+</nav>
+
+<!-- DASH HEADER -->
+<div class="dash-header">
+  <div class="dash-header-inner">
+    <div>
+      <p class="section-tag">Global Statistics</p>
+      <h1 class="dash-title">Token Dashboard</h1>
+      <p style="margin-top:0.5rem;font-size:0.9rem">Live on-chain data — updated every block (~12 seconds)</p>
+    </div>
+    <div class="dash-live">
+      <div class="live-dot"></div>
+      LIVE · Last updated: <span id="lastUpdate">just now</span>
+    </div>
+  </div>
+</div>
+
+<div class="dash-body">
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-tag">Total Tokens Issued</div>
+      <div class="kpi-value" data-target="2847392">0</div>
+      <div class="kpi-sub">CBT tokens minted on-chain</div>
+      <div class="kpi-change up">↑ +12,400 this week</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-tag">Tokens Retired (Burned)</div>
+      <div class="kpi-value" data-target="1203847">0</div>
+      <div class="kpi-sub">tCO₂e permanently offset</div>
+      <div class="kpi-change up">↑ +4,820 this week</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-tag">Tokens in Circulation</div>
+      <div class="kpi-value" data-target="1643545">0</div>
+      <div class="kpi-sub">CBT available for retirement</div>
+      <div class="kpi-change dn">↓ -640 from yesterday</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-tag">Partner Organisations</div>
+      <div class="kpi-value" data-target="347">0</div>
+      <div class="kpi-sub">Active accounts</div>
+      <div class="kpi-change up">↑ +8 this month</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="charts-row">
+    <!-- Line chart -->
+    <div class="chart-panel">
+      <div class="panel-title">Global VCM Issuances vs. Retirements</div>
+      <div class="panel-sub">MARKET CONTEXT · 2016–2024 · MtCO₂e · Source: Sylvera, Climate Focus</div>
+      <canvas id="lineChart" width="700" height="250"></canvas>
+      <div style="display:flex;gap:1.5rem;margin-top:1rem">
+        <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--muted)">
+          <div style="width:16px;height:2px;background:var(--green);border-radius:2px"></div> Retirements
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--muted)">
+          <div style="width:16px;height:2px;background:var(--gold);border-radius:2px"></div> Issuances
+        </div>
+      </div>
+    </div>
+    <!-- Donut -->
+    <div class="chart-panel">
+      <div class="panel-title">Token Distribution by Registry</div>
+      <div class="panel-sub">CARBONBRIDGE TOKENS · by certification standard</div>
+      <div class="donut-wrap">
+        <canvas id="donutChart" width="170" height="170"></canvas>
+        <div class="donut-legend">
+          <div class="dl-item">
+            <div class="dl-dot" style="background:var(--green)"></div>
+            <span class="dl-label">Verra VCS</span>
+            <span class="dl-val">45.7%</span>
+          </div>
+          <div class="dl-item">
+            <div class="dl-dot" style="background:var(--green-dim)"></div>
+            <span class="dl-label">Nature-Based</span>
+            <span class="dl-val">29.1%</span>
+          </div>
+          <div class="dl-item">
+            <div class="dl-dot" style="background:var(--gold)"></div>
+            <span class="dl-label">Gold Standard</span>
+            <span class="dl-val">19.1%</span>
+          </div>
+          <div class="dl-item">
+            <div class="dl-dot" style="background:var(--muted)"></div>
+            <span class="dl-label">Other</span>
+            <span class="dl-val">6.1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT BREAKDOWN + GLOBAL MARKET -->
+  <div class="context-row">
+    <!-- Horizontal bars: by project type -->
+    <div class="chart-panel">
+      <div class="panel-title">Retirements by Project Type</div>
+      <div class="panel-sub">CARBONBRIDGE RETIREMENTS · cumulative · tCO₂e</div>
+      <div class="h-bar-list" id="hBarList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Global market bars -->
+    <div class="chart-panel">
+      <div class="panel-title">VCM Global Retirements by Year</div>
+      <div class="panel-sub">GLOBAL MARKET · MtCO₂e · 2016–2024</div>
+      <div class="global-bars" id="globalBars">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKET CONTEXT CARDS -->
+  <div class="market-context">
+    <div class="mc-card">
+      <div class="mc-num">163M</div>
+      <div class="mc-label">tCO₂e retired globally in 2024</div>
+      <p style="margin-top:0.75rem">Global voluntary carbon market retirements reached record levels, driven by corporate net-zero commitments. Verra accounts for 63% of all retirements.</p>
+    </div>
+    <div class="mc-card">
+      <div class="mc-num">$15.8B</div>
+      <div class="mc-label">voluntary carbon market size (2025)</div>
+      <p style="margin-top:0.75rem">The market is projected to reach $120B by 2030 at a 50% CAGR, driven by tightening corporate sustainability regulations and net-zero mandates.</p>
+    </div>
+    <div class="mc-card">
+      <div class="mc-num">6,200+</div>
+      <div class="mc-label">companies with science-based targets</div>
+      <p style="margin-top:0.75rem">More than 6,200 companies held science-based targets in 2025, turning voluntary pledges into procurement obligations that drive carbon credit demand.</p>
+    </div>
+  </div>
+
+  <!-- RECENT RETIREMENTS TABLE -->
+  <div class="retirements-panel">
+    <div class="rp-header">
+      <div>
+        <div class="panel-title">Recent On-Chain Retirements</div>
+        <div class="panel-sub" style="margin:0">Latest token retirement transactions · public blockchain</div>
+      </div>
+      <a href="#" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--green);letter-spacing:0.05em">View All →</a>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rp-table">
+        <thead>
+          <tr>
+            <th>Tx Hash</th>
+            <th>Organisation</th>
+            <th>Tonnes CO₂e</th>
+            <th>Project Type</th>
+            <th>Registry</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="td-hash">0x4a8f...c2b1</span></td>
+            <td><span class="td-org">Nexgen Manufacturing</span></td>
+            <td><span class="td-tonnes">1,200</span></td>
+            <td><span class="td-type">REDD+ Avoided Deforestation</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--green)">Verra VCS</span></td>
+            <td><span class="badge-status retired">● Retired</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-hash">0x9c3d...f8a4</span></td>
+            <td><span class="td-org">BlueSky Airlines</span></td>
+            <td><span class="td-tonnes">8,450</span></td>
+            <td><span class="td-type">Renewable Energy (Wind)</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--gold)">Gold Standard</span></td>
+            <td><span class="badge-status retired">● Retired</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-hash">0x2e7a...91c3</span></td>
+            <td><span class="td-org">GreenLogistics GmbH</span></td>
+            <td><span class="td-tonnes">340</span></td>
+            <td><span class="td-type">Clean Cookstoves, Kenya</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--gold)">Gold Standard</span></td>
+            <td><span class="badge-status retired">● Retired</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-hash">0x7f1b...3e52</span></td>
+            <td><span class="td-org">Meridian Bank</span></td>
+            <td><span class="td-tonnes">2,100</span></td>
+            <td><span class="td-type">Blue Carbon (Mangrove)</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--green)">Verra VCS</span></td>
+            <td><span class="badge-status pending">◌ Pending</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-hash">0xb39c...17da</span></td>
+            <td><span class="td-org">Apex Tech Solutions</span></td>
+            <td><span class="td-tonnes">560</span></td>
+            <td><span class="td-type">Solar Energy, India</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--gold)">Gold Standard</span></td>
+            <td><span class="badge-status retired">● Retired</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-hash">0x4d2f...89b7</span></td>
+            <td><span class="td-org">Pacific Container Lines</span></td>
+            <td><span class="td-tonnes">5,200</span></td>
+            <td><span class="td-type">Improved Forest Management</span></td>
+            <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--green)">Verra VCS</span></td>
+            <td><span class="badge-status retired">● Retired</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /dash-body -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <span class="logo-mark">◈</span>
+          <span>CarbonBridge</span>
+        </div>
+        <p>Blockchain-verified carbon offset tokens, backed by Gold Standard and Verra certified credits.</p>
+      </div>
+      <div class="footer-links"><h4>Platform</h4><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="dashboard.html">Dashboard</a><a href="login.html">Login</a></div>
+      <div class="footer-links"><h4>Company</h4><a href="about.html">About Us</a><a href="#">Whitepaper</a><a href="#">Contact</a></div>
+      <div class="footer-links"><h4>Standards</h4><a href="https://www.goldstandard.org" target="_blank">Gold Standard ↗</a><a href="https://verra.org" target="_blank">Verra ↗</a><a href="https://unfccc.int" target="_blank">UNFCCC ↗</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 CarbonBridge. All rights reserved.</span>
+      <span>Data: Sylvera, Climate Focus, Abatable (2024 reviews). Dashboard reflects real market data + illustrative CarbonBridge token figures.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  // Init canvas charts
+  window.addEventListener('load', () => {
+    window.initDashboard();
+  });
+
+  // Horizontal bars
+  const hBarData = [
+    { label: 'Avoided Deforestation (REDD+)', pct: 31, val: '373K tCO₂e', color: '#4ade80' },
+    { label: 'Renewable Energy', pct: 29, val: '349K tCO₂e', color: '#22c55e' },
+    { label: 'Clean Cookstoves', pct: 18, val: '217K tCO₂e', color: '#d4a843' },
+    { label: 'Blue Carbon', pct: 12, val: '144K tCO₂e', color: '#4ade8080' },
+    { label: 'Soil & Agriculture', pct: 7,  val: '84K tCO₂e',  color: '#7a9585' },
+    { label: 'Other', pct: 3, val: '36K tCO₂e', color: '#4a5c50' },
+  ];
+  const hBarList = document.getElementById('hBarList');
+  if (hBarList) {
+    hBarList.innerHTML = hBarData.map(d => `
+      <div class="hb-item">
+        <div class="hb-header">
+          <span class="hb-label">${d.label}</span>
+          <span class="hb-val">${d.val}</span>
+        </div>
+        <div class="hb-track">
+          <div class="hb-fill" style="width:0%;background:${d.color}" data-w="${d.pct}"></div>
+        </div>
+      </div>
+    `).join('');
+
+    // Animate bars
+    setTimeout(() => {
+      document.querySelectorAll('.hb-fill').forEach(el => {
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 300);
+  }
+
+  // Global bars
+  const gbData = [
+    { year: '2016', val: 31 }, { year: '2017', val: 45 }, { year: '2018', val: 67 },
+    { year: '2019', val: 89 }, { year: '2020', val: 111 }, { year: '2021', val: 160 },
+    { year: '2022', val: 154 }, { year: '2023', val: 163 }, { year: '2024', val: 163 },
+  ];
+  const maxGb = 163;
+  const globalBars = document.getElementById('globalBars');
+  if (globalBars) {
+    globalBars.innerHTML = gbData.map((d, i) => {
+      const h = (d.val / maxGb) * 160;
+      const opacity = i === gbData.length - 1 ? '1' : '0.6';
+      return `
+        <div class="gb-group">
+          <div class="gb-bars" style="height:170px">
+            <div class="gb-bar" style="height:${h}px;background:var(--green);opacity:${opacity}" title="${d.val} MtCO₂e"></div>
+          </div>
+          <div class="gb-year">${d.year}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // Live update time
+  setInterval(() => {
+    const el = document.getElementById('lastUpdate');
+    if (el) el.textContent = new Date().toLocaleTimeString();
+  }, 12000);
+
+  // Counter
+  document.querySelectorAll('[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const step = target / 80;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.round(current).toLocaleString();
+      if (current >= target) clearInterval(timer);
+    }, 20);
+  });
+</script>
+</body>
+</html>

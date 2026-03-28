@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — CarbonBridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ---- ABOUT SPECIFIC ---- */
+    .mission-section {
+      padding: 100px 0;
+    }
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .mission-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.5;
+      border-left: 3px solid var(--green);
+      padding-left: 2rem;
+      margin: 2rem 0;
+    }
+
+    /* Stats banner */
+    .stats-banner {
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 0;
+    }
+    .stats-banner-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+    .sb-val {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    .sb-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Problem section */
+    .problem-section {
+      padding: 100px 0;
+      background: var(--bg-raised);
+      border-bottom: 1px solid var(--border);
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .problem-block {
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .pb-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: rgba(74,222,128,0.15);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .pb-title {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .pb-body { font-size: 0.88rem; }
+
+    /* Values */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .value-card {
+      padding: 1.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      gap: 1rem;
+      transition: border-color 0.3s;
+    }
+    .value-card:hover { border-color: var(--border-md); }
+    .value-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .value-card h3 {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+    .value-card p { font-size: 0.85rem; }
+
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .team-card {
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .team-card:hover { border-color: var(--border-md); }
+    .team-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--bg-raised);
+      border: 2px solid var(--border-md);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+    .team-card h3 {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+    .team-role {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--green);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .team-card p { font-size: 0.85rem; }
+
+    /* Press / Partners */
+    .partners-section { padding: 80px 0; border-top: 1px solid var(--border); }
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .partner-card {
+      padding: 1.5rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .partner-card:hover { border-color: var(--border-md); }
+    .partner-name {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+    .partner-type {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 1024px) {
+      .mission-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .stats-banner-grid { grid-template-columns: repeat(2, 1fr); }
+      .problem-grid { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .partners-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .problem-grid, .values-grid, .team-grid { grid-template-columns: 1fr; }
+      .stats-banner-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-mark">◈</span>
+      <span>CarbonBridge</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="how-it-works.html" class="nav-link">How It Works</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="login.html" class="nav-cta">Connect / Login</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Connect / Login</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-bg">
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+  <div class="page-hero-content">
+    <p class="section-tag">Our Mission</p>
+    <h1>Bridging the gap between<br><em>climate action</em> and trust.</h1>
+    <p style="margin-top:1rem">We built CarbonBridge because carbon markets desperately need a new infrastructure — one where claims can be verified by anyone, and where double-counting is impossible by design.</p>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission-section">
+  <div class="container">
+    <div class="mission-grid">
+      <div>
+        <p class="section-tag">Why We Exist</p>
+        <h2 class="section-title">The carbon market<br>has a trust problem.</h2>
+        <blockquote class="mission-quote">
+          "We believe every tonne of CO₂ offset should be verifiable by any child with an internet connection — not just auditors with access to private registries."
+        </blockquote>
+        <p class="section-body">
+          In 2023, investigations revealed that over 90% of some major registry's forest credits may have been worthless — so-called "phantom credits" that allowed corporations to claim carbon neutrality on paper while changing nothing in reality.
+        </p>
+        <p class="section-body">
+          CarbonBridge was founded to fix this at the infrastructure level. By anchoring each carbon credit to a unique, non-reusable blockchain token, we make the entire offset lifecycle — from project certification to retirement — mathematically verifiable and permanently auditable.
+        </p>
+      </div>
+      <div>
+        <div style="padding:2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)">
+          <p class="section-tag">Our Approach</p>
+          <div style="display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem">
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(74,222,128,0.1);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem">🎯</div>
+              <div>
+                <h3 style="font-family:var(--font-sans);font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.25rem">Only the best credits</h3>
+                <p style="font-size:0.85rem">We source exclusively from Gold Standard and Verra VCS — the two most rigorous voluntary carbon standards globally.</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(74,222,128,0.1);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem">🔒</div>
+              <div>
+                <h3 style="font-family:var(--font-sans);font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.25rem">Blockchain as infrastructure</h3>
+                <p style="font-size:0.85rem">We use blockchain not for speculation, but as an immutable ledger. Every token carries full provenance and can only be retired once.</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;align-items:flex-start">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(74,222,128,0.1);border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem">🌍</div>
+              <div>
+                <h3 style="font-family:var(--font-sans);font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.25rem">Radical transparency</h3>
+                <p style="font-size:0.85rem">Every single token, transfer and retirement is public. No trust required — verify it yourself, right now, on our live explorer.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-banner">
+  <div class="container">
+    <div class="stats-banner-grid">
+      <div>
+        <div class="sb-val">1.2M+</div>
+        <div class="sb-label">Tonnes CO₂ Retired</div>
+      </div>
+      <div>
+        <div class="sb-val">347</div>
+        <div class="sb-label">Partner Organisations</div>
+      </div>
+      <div>
+        <div class="sb-val">2</div>
+        <div class="sb-label">Tier-1 Registry Partnerships</div>
+      </div>
+      <div>
+        <div class="sb-val">0</div>
+        <div class="sb-label">Double-Counted Tokens</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM WE SOLVE -->
+<section class="problem-section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">The Problem</p>
+      <h2 class="section-title">Three failures in<br>today's carbon markets.</h2>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-block">
+        <div class="pb-num">01</div>
+        <div class="pb-title">Opacity & Trust Deficit</div>
+        <p class="pb-body">Registry ledgers are often private or difficult to access. Buyers have little way to independently verify that the credits they purchased are real, additional, and unretired elsewhere.</p>
+      </div>
+      <div class="problem-block">
+        <div class="pb-num">02</div>
+        <div class="pb-title">Double Counting Risk</div>
+        <p class="pb-body">Without a unified, public tracking system, the same underlying emission reduction can theoretically be claimed by multiple parties — undermining the entire premise of offsetting.</p>
+      </div>
+      <div class="problem-block">
+        <div class="pb-num">03</div>
+        <div class="pb-title">Friction & Inefficiency</div>
+        <p class="pb-body">Traditional processes involve brokers, weeks of settlement, paper certificates, and significant back-office burden — making offsets inaccessible for smaller organisations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Our Values</p>
+      <h2 class="section-title">Principles that<br>guide everything we build.</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🔍</div>
+        <div>
+          <h3>Radical Transparency</h3>
+          <p>Every action on CarbonBridge is publicly verifiable on the blockchain. We design systems where trust is earned through code, not promises.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🎯</div>
+        <div>
+          <h3>Uncompromising Quality</h3>
+          <p>We will never compromise on credit quality. Only projects that meet Gold Standard or Verra's rigorous standards are eligible for tokenisation.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌍</div>
+        <div>
+          <h3>Climate First</h3>
+          <p>Our mission is real climate impact, not financial speculation. Every product decision is evaluated against whether it makes carbon markets more effective.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <div>
+          <h3>Accessible to All</h3>
+          <p>From multinational corporations to SMEs, every organisation deserves access to high-integrity offsets. We build for everyone, not just crypto natives.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" style="background:var(--bg-raised);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">The Team</p>
+      <h2 class="section-title">Climate scientists,<br>blockchain engineers,<br>market specialists.</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">🌿</div>
+        <h3>Dr. Amara Osei</h3>
+        <div class="team-role">Chief Executive Officer</div>
+        <p>10 years in voluntary carbon markets. Former Director at Gold Standard Foundation. PhD in Environmental Economics.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">⛓</div>
+        <h3>Lukas Brandt</h3>
+        <div class="team-role">Chief Technology Officer</div>
+        <p>Led blockchain infrastructure at a top-5 DeFi protocol. Expert in ERC token standards and smart contract security.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">📊</div>
+        <h3>Priya Nair</h3>
+        <div class="team-role">Head of Registry Relations</div>
+        <p>Former Verra project developer. Deep expertise in VCS methodology and Gold Standard certification processes.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🔐</div>
+        <h3>Javier Ruiz</h3>
+        <div class="team-role">Head of Security & Compliance</div>
+        <p>Smart contract auditing background. Certified in carbon markets regulatory frameworks across EU, UK and APAC.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🌊</div>
+        <h3>Yuki Tanaka</h3>
+        <div class="team-role">Head of Project Sourcing</div>
+        <p>Specialist in nature-based solutions and blue carbon. Has developed certified projects across Southeast Asia and East Africa.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🏢</div>
+        <h3>Sophie Marchetti</h3>
+        <div class="team-role">VP Enterprise Sales</div>
+        <p>Built sustainability programmes for Fortune 500 clients. Expert in corporate carbon accounting and ESG reporting frameworks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER ORGANISATIONS -->
+<section class="partners-section">
+  <div class="container">
+    <div class="section-header center">
+      <p class="section-tag">Standards & Partners</p>
+      <h2 class="section-title">Recognised by the<br>institutions that matter.</h2>
+    </div>
+    <div class="partners-grid">
+      <div class="partner-card">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🌿</div>
+        <div class="partner-name">Gold Standard</div>
+        <div class="partner-type">Registry Partner</div>
+      </div>
+      <div class="partner-card">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">✓</div>
+        <div class="partner-name">Verra (VCS)</div>
+        <div class="partner-type">Registry Partner</div>
+      </div>
+      <div class="partner-card">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🌍</div>
+        <div class="partner-name">UNFCCC</div>
+        <div class="partner-type">Framework Alignment</div>
+      </div>
+      <div class="partner-card">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">⭐</div>
+        <div class="partner-name">ICVCM</div>
+        <div class="partner-type">Core Carbon Principles</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"><div class="orb-cta1"></div><div class="orb-cta2"></div></div>
+  <div class="container cta-content">
+    <h2 class="cta-title">Join us in making<br>carbon markets honest.</h2>
+    <p class="cta-sub">Whether you're an organisation looking to offset, a project developer, or an institution interested in partnership — we'd love to hear from you.</p>
+    <div class="cta-actions">
+      <a href="login.html" class="btn-primary btn-lg">Get Started</a>
+      <a href="how-it-works.html" class="btn-ghost">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem"><span class="logo-mark">◈</span><span>CarbonBridge</span></div>
+        <p>Blockchain-verified carbon offset tokens, backed by Gold Standard and Verra certified credits.</p>
+      </div>
+      <div class="footer-links"><h4>Platform</h4><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="dashboard.html">Dashboard</a><a href="login.html">Login</a></div>
+      <div class="footer-links"><h4>Company</h4><a href="about.html">About Us</a><a href="#">Whitepaper</a><a href="#">Contact</a></div>
+      <div class="footer-links"><h4>Standards</h4><a href="https://www.goldstandard.org" target="_blank">Gold Standard ↗</a><a href="https://verra.org" target="_blank">Verra ↗</a><a href="https://unfccc.int" target="_blank">UNFCCC ↗</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 CarbonBridge. All rights reserved.</span>
+      <span>Privacy · Terms · Whitepaper</span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
